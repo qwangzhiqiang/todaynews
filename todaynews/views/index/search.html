@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>《今日头条》你关心的,才是头条! - TouTiao.com</title>
+    <link rel="icon" href="/assets/index/img/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/index/css/secrch.css">
+    <link rel="stylesheet" href="/assets/index/css/public.css">
+    <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="box">
+        <div class="index">
+            <div class="top">
+               <div class="middle">
+                   <a href="/index.php?c=page&m=index" class="middle-title">
+                       <span class="title">搜索</span>
+                       <span class="black">
+                           <img src="/assets/index/img/back.png" alt="">
+                       </span>
+                   </a>
+
+
+               </div>
+            </div>
+            <form action="/index.php">
+                <div class="search">
+                    <a href="#" class="toutiao-icon "></a>
+                    <div class="arrow"></div>
+                    <input type="hidden" name="c" value="page">
+                    <input type="hidden" name="m" value="search">
+                    <input type="search" placeholder="请输入搜索关键字" class="con" name="wd" value="<?php if(count($result) != 0){
+         echo $wd;
+         }
+         ?>">
+                    <input type="hidden">
+                </div>
+            </form>
+            <?php if( $total_number == 0 ){ ?>
+            <div>抱歉 没有找到你想要的结果</div>
+            <?php } ?>
+
+            <?php if( $total_number != 0 ){ ?>
+            <div>共 <?php  echo $total_number ?>条结果</div>
+            <?php } ?>
+
+            <ul>
+
+            </ul>
+            <?php if ( $total_number > 4 ){ ?>
+            <button id="more">加载更多</button>
+            <?php } ?>
+            <div class="search-con">
+                <div class="hot-word">
+                    <ul id="toutiao">
+                        <?php foreach($result as $k => $v ){ ?>
+                        <li>
+                            <a href="<?php echo $v['url'] ?>"><?php echo $v['title'] ?></a>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+
+
+                <div class="list-con"></div>
+                <div class="list-bottom"></div>
+            </div>
+
+        </div>
+    </body>
+<script>
+    var page = 1;
+    $(function () {
+        $('#more').click(function () {
+
+            $.ajax({
+                url:'/index.php?c=page&m=news&wd=<?php echo $wd ?>&page=' + ( page + 1 ),
+                success:function (data) {
+                    page = page + 1;
+
+                    data = JSON.parse(data);
+                    if(data.length){
+//                        data.forEach(v=>{
+//                            $(`<a href="<?php echo $v['url'] ?>"><?php echo $v['title'] ?></a>`)
+//                    .appendTo('#tiaotou');
+                        data.forEach(v=>{
+                            $(`<li><a href="<?php echo $v['url'] ?>">${v.title}</a> </li>`)
+                    .appendTo('#toutiao');
+                    })
+                    }else{
+                        alert('没有更多');
+                        $('#more').remove();
+                    }
+                    console.log(data);
+                }
+            })
+        })
+    })
+</script>
+<!--<script src="/assets/index/js/index.js"></script>-->
+</html>
+
+
+
+
+
+<!--<!doctype html>-->
+<!--<html >-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<meta name="viewport"-->
+          <!--content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
+    <!--<meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+    <!--<title>Document</title>-->
+    <!--<script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<form action="https://www.baidu.com/s" id="form" method="get" target="_blank">-->
+    <!--<input id="wd" name="wd">-->
+    <!--<button tyep="submit">提交</button>-->
+<!--</form>-->
+<!--</body>-->
+<!--<script>-->
+
+    <!--$(function () {-->
+        <!--$('#form').submit(function () {-->
+            <!--var wd = $('#wd').val();-->
+            <!--if(wd.trim()){-->
+                <!--location.href = 'https://www.baidu.com/s?wd=' + wd + ' site:www.sxuek.com '-->
+            <!--}else{-->
+                <!--alert("请输入关键字")-->
+            <!--}-->
+            <!--return false;-->
+        <!--})-->
+    <!--})-->
+<!--</script>-->
+<!--</html>-->

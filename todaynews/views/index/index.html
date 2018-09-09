@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+    <title>今日头条 - TouTiao.com</title>
+    <link rel="icon" href="/assets/index/img/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/index/css/index.css">
+    <link rel="stylesheet" href="/assets/index/css/public.css">
+
+</head>
+<body>
+    <div class="box">
+        <div class="index">
+            <div class="top">
+               <div class="middle">
+                   <a href="#" class="middle-title">
+                       <img src="/assets/index/img/title.png" alt="">
+                   </a>
+                   <a href="#" class="refresh">
+                       <img src="/assets/index/img/refresh.png" alt="">
+                   </a>
+               </div>
+               <div class="top-left">
+                   <a href="#" class="message">
+                       <img src="/assets/index/img/message.png" alt="">
+                   </a>
+               </div>
+               <div class="top-right">
+                   <a href="/index.php?c=page&m=search" class="search">
+                       <img src="/assets/index/img/search.png" alt="">
+                   </a>
+               </div>
+            </div>
+            <div class="top-menu">
+                <ul class="menu-left">
+                    <?php foreach($category as $k => $v) {?>
+                        <li class="<?php echo $v['id'] == $cid?'active':'' ?>">
+                            <a href="/index.php?c=page&m=index&cid=<?php echo $v['id'] ?>&page=1">
+                                <?php echo $v['name'] ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+                <div class="menu-more">
+                    <a href="/index.php?c=page&m=category">
+                        <span class="add">+</span>
+                    </a>
+                </div>
+            </div>
+            <div class="content">
+                <div class="list-top">
+                    <?php foreach($news as $k => $v) {?>
+                    <a href="<?php echo $v['url'] ?>" class="list-top-con">
+
+                     <div class="top-text">
+                         <h3>
+                             <?php echo $v['title'] ?>
+                         </h3>
+                         <div class="item-info">
+                             <div class="info-con">
+                                 <span class="info-top">
+                                    置顶
+                                 </span>
+                                 <span class="space">
+                                        央视新闻网
+                                 </span>
+                                 <span class="comment">
+                                     <?php echo $v['create_time'] ?>
+                                     <!--<?php echo $v['dsc'] ?>-->
+                                 </span>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="top-img">
+                         <img src="<?php echo $v['image'] ?>" alt="">
+                     </div>
+
+                    </a>
+                    <?php } ?>
+                </div>
+
+            </div>
+            </div>
+        <button id="more">加载更多</button>
+            <div class="hide">
+                <div class="popup">
+                    <div class="banner">
+                        <img src="/assets/index/img/hide-img.png" alt="">
+                    </div>
+                    <p>已加载好您感兴趣的头条</p>
+                    <div class="popup-btn">立即打开</div>
+                    <div class="close"></div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</body>
+<script>
+    var page = 1;
+    $(function () {
+        $('#more').click(function () {
+
+            $.ajax({
+                url:'/index.php?c=page&m=news&wd=<?php echo $wd ?>&page=' + ( page + 1 ),
+                success:function (data) {
+                    page = page + 1;
+                    data = JSON.parse(data);
+                    if(data.length){
+                        data.forEach( v= >{
+                            $(`<li><a href="<?php echo $v['url'] ?>">${v.title}</a> </li>`)
+                    .appendTo('.list-top');
+                    })
+                    }else{
+                        alert('没有更多');
+                        $('#more').remove();
+                    }
+                    console.log(data);
+                }
+            })
+        })
+    })
+</script>
+<script src="/assets/index/js/rem.js"></script>
+<script src="/assets/index/js/index.js"></script>
+
+</html>     

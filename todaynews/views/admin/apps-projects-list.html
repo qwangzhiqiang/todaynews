@@ -1,0 +1,65 @@
+<?php include 'index_header.html'; ?>
+
+<div class="container-fluid">
+    <div class="table-responsive-sm">
+        <table class="table table-hover table-centered mb-0">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>is_default</th>
+
+
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            <?php  foreach ($category as $k => $v) {?>
+            <tr data-id = "<?php echo $v['id'] ?>">
+
+                <td>
+                    <?php echo $v['id']; ?>
+                </td>
+                <td>
+                    <input data-type="name" class="lb" type="text" value="<?php echo $v['name'] ?>">
+                </td>
+                <td><span class="badge">
+                 <input data-type="is_default" class="lb"  type="text" value="<?php echo $v['is_default'] ?>">
+            </span></td>
+                <td> <button type="button" class="remove btn btn-dark">删除</button></td>
+
+            </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+        <button id="add" type="button" class="btn btn-outline-danger btn-rounded"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加</font></font></button>
+        <div id="progress" class="progress" style="width: 100px;height: 30px;left:0;right:0;top: 190px;margin:0 auto;">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                <span class="sr-only">100% Complete</span>
+            </div>
+        </div>
+    </div>
+
+    总条数:
+    <?php echo $num ?>
+    <ul id="pagination-demo" class="pagination-sm"></ul>
+    <script>
+        $(function(){
+            $('#pagination-demo').twbsPagination({
+                totalPages: <?php echo $page_total?>,
+
+            visiblePages: 3,
+                startPage:<?php echo $page?>,
+            onPageClick: function (event, page) {
+                console.log(page);
+                if(page != <?php echo $page?>){
+                    location.href="/admin.php?c=category&m=index&page="+page;
+                }
+            }
+        });
+        })
+    </script>
+
+
+    <script src="/assets/admin/js/category.js"></script>
+<?php include 'index_footer.html'; ?>
